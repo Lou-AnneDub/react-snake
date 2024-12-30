@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+  background-image: url("/background.png");
+}
+
+.toggle-wrapper {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: white;
+  padding: 50px 10px;
+  border-radius: 20px;
+}
+
+.flashbang {
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.dropzone {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.nether-video {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  -o-object-fit: cover;
+     object-fit: cover;
+  display: none;
+  opacity: 0.9;
+  width: 105%;
+  height: 105vh;
+  left: -2.5%;
+  top: -2.5%;
+  transform: scale(1);
+  transform-origin: center;
+  -webkit-animation: rotatePortal 1s infinite linear;
+          animation: rotatePortal 1s infinite linear;
+}
+
+.contour {
+  background-color: white;
+  width: 540px;
+  height: 590px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border-radius: 20px;
+}

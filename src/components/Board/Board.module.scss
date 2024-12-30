@@ -1,0 +1,32 @@
+.board {
+    background-color: #fce7e7;
+    width: 500px;
+    height: 500px;
+    position: relative;
+    margin: auto;
+    top: 12%;
+
+    .pause {
+        position: fixed;
+        bottom: 12px;
+        left: 12px;
+        background-color: #fff;
+        padding: 24px;
+        cursor: pointer;
+    }
+
+    .score {
+        position: absolute;
+        top: -8%;
+        left: 0;
+        color: black;
+    }
+
+    .highScore {
+        position: absolute;
+        top: -8%;
+        left: 100px;
+        color: black;
+    }
+}
+
