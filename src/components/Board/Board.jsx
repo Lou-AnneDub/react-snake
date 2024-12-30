@@ -177,7 +177,17 @@ const Board = () => {
         const onKeyDown = (e) => {
             // Empêcher les actions inutiles si le jeu est terminé
             if (gameOver) {
-                if (e.keyCode === 13 || e.keyCode === 32) { // Entrée ou Espace
+                if (e.keyCode === 13) { // Entrée
+                    replay();
+                }
+                return; // Bloquer toutes les autres touches
+            }
+
+            if (gamePaused) {
+                if (e.keyCode === 32) { // Espace
+                    setGamePaused(false);
+                }
+                if (e.keyCode === 13) { // Entrée
                     replay();
                 }
                 return; // Bloquer toutes les autres touches
@@ -219,6 +229,7 @@ const Board = () => {
             bonusTimer.current += deltaTime * 0.001;
 
 
+            if (gamePaused || gameOver) return;
             // Gestion de l'apparition de la nourriture
             if(foodTimer.current > 2 && foodArray.length < 5) {
                 foodTimer.current = 0;
