@@ -88,6 +88,7 @@ export const reversedControles = (e, direction, gamePaused, setGamePaused, repla
         default:
             break;
     }
+
 };
 
 
@@ -128,6 +129,7 @@ export const defaultControles = (e, direction, gamePaused, setGamePaused, replay
         default:
             break;
     }
+
 };
 
 

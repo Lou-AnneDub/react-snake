@@ -12,6 +12,10 @@ const Toggle = ({ mode }) => {
         } else {
             addMode(mode);
         }
+    };
+
+    const firstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     return (
@@ -21,7 +25,7 @@ const Toggle = ({ mode }) => {
                     className={`${s.switch} ${storeMode.includes(mode) === true ? s.switch_active : ""}`}
                 ></div>
             </div>
-            <span className={s.mode}>{mode}</span>
+            <span className={s.mode}>{firstLetter(mode)}</span>
         </div>
     )
 }

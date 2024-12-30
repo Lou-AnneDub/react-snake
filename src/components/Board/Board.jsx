@@ -1,10 +1,15 @@
+/* --- Problème détecté --- */
+// Lorsqu'on active un mode avant de lancer la partie, le snake bug 
+// Mais si on active un mode après avoir lancé la partie, le snake ne bug pas
+// J'ai tout de même laisser le code en commentaire pour que vous puissiez voir ce que j'ai essayé de faire
+
 import { useEffect, useState, useRef } from "react"; 
 import gsap from "gsap";
 import Snake from "../Snake/Snake";
 import Item from "../Item/Item";
 import GameOver from "../GameOver/GameOver";
 import PauseScreen from "../PauseScreen/PauseScreen";
-import StartScreen from "../StartScreen/StartScreen";
+//import StartScreen from "../StartScreen/StartScreen";
 import s from "./Board.module.scss";
 import { defaultControles, flashUser, generateRandomCoordinates, triggerMode, reversedControles, wizz, netherPortal } from "../../utils/utils";
 import useStore from "../../utils/store";
@@ -14,7 +19,7 @@ const Board = () => {
 
         const [gamePaused, setGamePaused] = useState(false);
 
-        const [startScreen, setStartScreen] = useState(true);
+        // const [startScreen, setStartScreen] = useState(true);
         const [isRestarting, setIsRestarting] = useState(false);
 
         const[snakeData, setSnakeData] = useState([
@@ -25,6 +30,7 @@ const Board = () => {
         const [trapArray, setTrapArray] = useState([]);
         const [foodArray, setFoodArray] = useState([]);
         const [bonusArray, setBonusArray] = useState([]);
+        const [bombArray, setBombArray] = useState([]);
 
         const [gameOver, setGameOver] = useState(false);
         const [speed, setSpeed] = useState(0.2);
@@ -50,10 +56,10 @@ const Board = () => {
             }
         };
 
-        const handleStart = () => {
+        /*const handleStart = () => {
             setStartScreen(false);
             gsap.ticker.add(gameLoop);
-        };
+        };*/
 
         const isOutOfBorder = (head) => {
             if(head[0] >= 500 || head[1] >= 500 || head[0] < 0 || head[1] < 0){
@@ -229,40 +235,46 @@ const Board = () => {
             bonusTimer.current += deltaTime * 0.001;
 
 
-            if (gamePaused || gameOver) return;
-            // Gestion de l'apparition de la nourriture
-            if(foodTimer.current > 2 && foodArray.length < 5) {
-                foodTimer.current = 0;
-                if (!gamePaused) addItem({ 
-                    getter: foodArray, 
-                    setter: setFoodArray 
-                });
-            }
+            if(gamePaused || gameOver){
+                return;
+            } else {
+                if (mode.includes("impossible") && timer.current > 0.02) {
+                    // Mode impossible avec une vitesse très rapide
+                    timer.current = 0;
+                    moveSnake();
+                    canChangeDirection.current = true;
+                } else if (timer.current > speed) {
+                    timer.current = 0;
+                    moveSnake();
+                    canChangeDirection.current = true;
+                }
 
-            // Gestion de l'apparition des pièges
-            if(trapTimer.current > 3 && trapArray.length < 5) {
-                trapTimer.current = 0;
-                if (!gamePaused) addItem({
-                    getter: trapArray, 
-                    setter: setTrapArray
-                });
-            }
+                // Gestion de l'apparition de la nourriture
+                if(foodTimer.current > 2 && foodArray.length < 5) {
+                    foodTimer.current = 0;
+                    addItem({ 
+                        getter: foodArray, 
+                        setter: setFoodArray 
+                    });
+                }
 
-            // Gestion de l'apparition des bonus
-            if (score > 1 && bonusArray.length < 1) {
-                if (bonusTimer.current > 5) {
+                // Gestion de l'apparition des pièges
+                if(trapTimer.current > 3 && trapArray.length < 5) {
+                    trapTimer.current = 0;
+                    addItem({
+                        getter: trapArray, 
+                        setter: setTrapArray
+                    });
+                }
+
+                // Gestion de l'apparition des bonus
+                if (score > 10 && bonusArray.length < 1 && bonusTimer.current > 10) {
                     bonusTimer.current = 0;
-                    if (!gamePaused) addItem({
+                    addItem({
                         getter: bonusArray,
                         setter: setBonusArray,
                     });
                 }
-            }
-
-            if(timer.current > (mode.includes("impossible") ? 0.02 : speed)){
-                timer.current = 0;
-                if (!gamePaused) moveSnake();
-                canChangeDirection.current = true;
             }
         };
 
@@ -299,11 +311,13 @@ const Board = () => {
         useEffect(() => {
             window.addEventListener("keydown", onKeyDown);
         
-            if(!startScreen) {
+            gsap.ticker.add(gameLoop);
+
+            /*if(!startScreen) {
                 gsap.ticker.add(gameLoop);
             } else {
                 gsap.ticker.remove(gameLoop);
-            }
+            }*/
 
             return () => {
                 window.removeEventListener("keydown", onKeyDown);
@@ -318,29 +332,30 @@ const Board = () => {
 
     return (
         <>
-            {gameOver ? <GameOver replay={replay} /> : gamePaused ? <PauseScreen quitPause={quitPause} replay={replay} /> : null}
-            {startScreen && <StartScreen onStart={handleStart} />}
+            {/* startScreen && <StartScreen onStart={handleStart} /> */}
 
-            {!startScreen && (
-                <div id="board" className={s.board}>
-                    <Snake data={snakeData} direction={direction} />
+            {/* !startScreen && (
+                <>*/}
+                    {gameOver ? <GameOver replay={replay} /> : gamePaused ? <PauseScreen quitPause={quitPause} replay={replay} /> : null}
+                    <div id="board" className={s.board}>
+                        <Snake data={snakeData} direction={direction} />
 
-                    <span className={s.score}>Score: {score}</span>
-                    <span className={s.highScore}>High Score: {highScore}</span>
+                        <span className={s.score}>Score: {score}</span>
+                        <span className={s.highScore}>High Score: {highScore}</span>
 
-                    {foodArray.map((coordinates) => 
-                        <Item key={coordinates.id} coordinates={coordinates} type={"food"}/>
-                    )} 
+                        {foodArray.map((coordinates) => 
+                            <Item key={coordinates.id} coordinates={coordinates} type={"food"}/>
+                        )} 
 
-                    {trapArray.map((coordinates) => 
-                        <Item key={coordinates.id} coordinates={coordinates} type={"trap"}/>
-                    )}   
+                        {trapArray.map((coordinates) => 
+                            <Item key={coordinates.id} coordinates={coordinates} type={"trap"}/>
+                        )}   
 
-                    {bonusArray.map((coordinates) => 
-                        <Item key={coordinates.id} coordinates={coordinates} type={"bonus"}/>
-                    )}
-                </div>
-            )}
+                        {bonusArray.map((coordinates) => 
+                            <Item key={coordinates.id} coordinates={coordinates} type={"bonus"}/>
+                        )}
+                    </div>
+                {/*</>)*/}
         </>
     );
 };
