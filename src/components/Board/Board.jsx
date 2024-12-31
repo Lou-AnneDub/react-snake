@@ -30,8 +30,7 @@ const Board = () => {
         const [trapArray, setTrapArray] = useState([]);
         const [foodArray, setFoodArray] = useState([]);
         const [bonusArray, setBonusArray] = useState([]);
-        const [bombArray, setBombArray] = useState([]);
-
+    
         const [gameOver, setGameOver] = useState(false);
         const [speed, setSpeed] = useState(0.2);
         const [score, setScore] = useState(0);
@@ -183,20 +182,20 @@ const Board = () => {
         const onKeyDown = (e) => {
             // Empêcher les actions inutiles si le jeu est terminé
             if (gameOver) {
-                if (e.keyCode === 13) { // Entrée
+                if (e.keyCode === 13) { // Enter
                     replay();
                 }
-                return; // Bloquer toutes les autres touches
+                return; 
             }
 
             if (gamePaused) {
-                if (e.keyCode === 32) { // Espace
+                if (e.keyCode === 32) { // Space
                     setGamePaused(false);
                 }
-                if (e.keyCode === 13) { // Entrée
+                if (e.keyCode === 13) { // Enter
                     replay();
                 }
-                return; // Bloquer toutes les autres touches
+                return;
             }
         
             if (!canChangeDirection.current) return;

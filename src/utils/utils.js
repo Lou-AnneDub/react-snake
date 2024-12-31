@@ -53,10 +53,10 @@ export const wizz = () => {
 
 export const reversedControles = (e, direction, gamePaused, setGamePaused, replay, isGameOverScreenActive) => {
     if (isGameOverScreenActive) {
-        if (e.keyCode === 13) { // Entrée
+        if (e.keyCode === 13) { // Enter
             replay();
         }
-        if (e.keyCode === 32) { // Espace
+        if (e.keyCode === 32) { // Space
             setGamePaused(gamePaused ? false : true);
         }
         return; // Ignore les autres touches en mode Game Over
@@ -69,19 +69,19 @@ export const reversedControles = (e, direction, gamePaused, setGamePaused, repla
             break;
 
         case 38: 
-            // Haut (inversé)
+            // Haut
             if (direction.current !== "UP") direction.current = "DOWN";
             break;
         case 40: 
-            // Bas (inversé)
+            // Bas
             if (direction.current !== "DOWN") direction.current = "UP";
             break;
         case 37: 
-            // Gauche (inversé)
+            // Gauche
             if (direction.current !== "LEFT") direction.current = "RIGHT";
             break;
         case 39: 
-            // Droite (inversé)
+            // Droite 
             if (direction.current !== "RIGHT") direction.current = "LEFT";
             break;
 
